@@ -1,0 +1,31 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Books" %>
+
+<h1>Books</h1>
+
+<div id="books">
+  <% @books.each do |book| %>
+    <% if book.image.attached? %>
+      <%= image_tag book.image, style: "max-width: 200px; height: auto;" %>
+    <% end %>
+    <%= render book %>
+    <%= book.categories.map(&:name).join(" / ") %>
+    <p>
+      <%= link_to "Show this book", book %>
+      <% if policy(book).edit? %>
+        <%= link_to "Edit this book", edit_admin_book_path(book) %>
+      <% end %>
+      <% if policy(book).destroy? %>
+        <%= link_to "Delete this book", book, method: :delete, data: { confirm: "Are you sure?" } %>
+      <% end %>
+      <% if !policy(book).create? %>
+        <%= button_to "Add to Cart", book_add_to_cart_path(book), method: :post %>
+      <% end %>
+    </p>
+  <% end %>
+</div>
+
+<% if policy(Book).new? %>
+  <%= link_to "New book", new_admin_book_path %>
+<% end %>

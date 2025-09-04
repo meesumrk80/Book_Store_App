@@ -1,0 +1,34 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @book %>
+<p>
+  <strong>Cover Image:</strong><br>
+  <% if @book.image.attached? %>
+    <%= image_tag @book.image, style: "max-width: 200px; height: auto;" %>
+  <% else %>
+    No image uploaded.
+  <% end %>
+</p>
+
+<p>
+  <strong>Categories:</strong><br>
+  <% if @book.categories.any? %>
+    <ul>
+      <% @book.categories.each do |category| %>
+        <li><%= category.name %></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <em>No categories assigned</em>
+  <% end %>
+</p>
+
+<div>
+  <% if policy(@book).edit? %>
+    <%= link_to "Edit this book", edit_book_path(@book) %> |
+  <% end %>
+  <%= link_to "Back to books", books_path %>
+  <% if policy(@book).destroy? %>
+    <%= button_to "Destroy this book", @book, method: :delete, data: { confirm: "Are you sure?" } %>
+  <% end %>
+</div>
