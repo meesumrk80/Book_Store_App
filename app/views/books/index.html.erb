@@ -1,31 +1,54 @@
-<p style="color: green"><%= notice %></p>
+<p class="text-green-600"><%= notice %></p>
 
 <% content_for :title, "Books" %>
 
-<h1>Books</h1>
+<h1 class="text-2xl font-bold mb-6 text-gray-900">Books</h1>
 
-<div id="books">
+<div id="books" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
   <% @books.each do |book| %>
-    <% if book.image.attached? %>
-      <%= image_tag book.image, style: "max-width: 200px; height: auto;" %>
-    <% end %>
-    <%= render book %>
-    <%= book.categories.map(&:name).join(" / ") %>
-    <p>
-      <%= link_to "Show this book", book %>
-      <% if policy(book).edit? %>
-        <%= link_to "Edit this book", edit_admin_book_path(book) %>
+    <div class="bg-white rounded-lg shadow p-4 flex flex-col">
+      <!-- Book Image -->
+      <% if book.image.attached? %>
+        <%= image_tag book.image, class: "w-full h-48 object-cover rounded-lg" %>
+      <% else %>
+        <%= image_tag "img1.jpg", class: "w-full h-48 object-cover rounded-lg" %>
       <% end %>
-      <% if policy(book).destroy? %>
-        <%= link_to "Delete this book", book, method: :delete, data: { confirm: "Are you sure?" } %>
-      <% end %>
-      <% if !policy(book).create? %>
-        <%= button_to "Add to Cart", book_add_to_cart_path(book), method: :post %>
-      <% end %>
-    </p>
+
+      <!-- Book Info -->
+      <div class="mt-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-800"><%= book.title %></h2>
+        <p class="text-sm text-gray-600"><%= book.categories.map(&:name).join(" / ") %></p>
+
+        <%= render book %>
+      </div>
+
+      <!-- Actions -->
+      <div class="mt-4 space-y-2">
+        <%= link_to "Show this book", book,
+          class: "block w-full text-center text-blue-600 hover:underline text-sm font-medium" %>
+
+        <% if policy(book).edit? %>
+          <%= link_to "Edit this book", edit_admin_book_path(book),
+            class: "block w-full text-center text-yellow-600 hover:underline text-sm font-medium" %>
+        <% end %>
+
+        <% if policy(book).destroy? %>
+          <%= link_to "Delete this book", book, method: :delete, data: { confirm: "Are you sure?" },
+            class: "block w-full text-center text-red-600 hover:underline text-sm font-medium" %>
+        <% end %>
+
+        <% if !policy(book).create? %>
+          <%= button_to "Add to Cart", book_add_to_cart_path(book), method: :post,
+            class: "w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 text-sm font-medium" %>
+        <% end %>
+      </div>
+    </div>
   <% end %>
 </div>
 
 <% if policy(Book).new? %>
-  <%= link_to "New book", new_admin_book_path %>
+  <div class="mt-6">
+    <%= link_to "New book", new_admin_book_path,
+      class: "inline-block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm font-medium" %>
+  </div>
 <% end %>

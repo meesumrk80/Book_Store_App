@@ -25,19 +25,48 @@
     <%= javascript_importmap_tags %>
 </head>
 
-<body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <%= render "shared/nav" %>
-    <% if user_signed_in? %>
-    Logged in as <%= current_user.email %> |
-    <%= button_to "Logout", destroy_user_session_path, method: :delete %>
-    <% else %>
-    <%= link_to "Login", new_user_session_path %> |
-    <%= link_to "Sign up", new_user_registration_path %>
-    <% end %>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+  <!-- Flash Messages -->
+  <% if notice.present? %>
+    <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
+      <%= notice %>
+    </div>
+  <% end %>
 
+  <% if alert.present? %>
+    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+      <%= alert %>
+    </div>
+  <% end %>
+
+  <!-- Navigation -->
+  <%= render "shared/nav" %>
+
+  <!-- Auth Links -->
+  <div class="container mx-auto px-4 mt-4">
+    <% if user_signed_in? %>
+      <div class="flex items-center space-x-4 text-gray-700">
+        <span>Logged in as <strong><%= current_user.email %></strong></span>
+        <%= button_to "Logout",
+              destroy_user_session_path,
+              method: :delete,
+              class: "px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700
+                      focus:ring-4 focus:outline-none focus:ring-red-300" %>
+      </div>
+    <% else %>
+      <div class="flex space-x-4">
+        <%= link_to "Login", new_user_session_path,
+              class: "text-blue-600 hover:underline" %>
+        <%= link_to "Sign up", new_user_registration_path,
+              class: "text-blue-600 hover:underline" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Page Content -->
+  <main class="flex-1 container mx-auto px-4 mt-6">
     <%= yield %>
+  </main>
 </body>
 
 </html>
