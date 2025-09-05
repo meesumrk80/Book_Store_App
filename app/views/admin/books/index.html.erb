@@ -1,0 +1,14 @@
+<h1>Books (Admin)</h1>
+
+<%= link_to "New Book", new_admin_book_path, class: "btn btn-primary" %>
+
+<ul>
+  <% @books.each do |book| %>
+    <li>
+      <%= book.title %> by <%= book.author %>
+      <%= link_to "Show", admin_book_path(book) %> |
+      <%= link_to "Edit", edit_admin_book_path(book) %> |
+      <%= link_to "Delete", admin_book_path(book), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+    </li>
+  <% end %>
+</ul>
