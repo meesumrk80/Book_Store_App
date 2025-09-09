@@ -1,0 +1,43 @@
+<!-- Reviews Section -->
+<div class="mt-12">
+  <h2 class="text-3xl font-bold text-gray-900 mb-6 border-b pb-3">Reviews</h2>
+
+  <!-- Review Form -->
+  <div class="bg-white shadow-md rounded-2xl p-6 mb-10">
+    <%= form_with(model: [@book, Review.new], local: true, class: "space-y-4") do |form| %>
+      
+      <!-- Rating -->
+      <div>
+        <%= form.label :rating, "Rating", class: "block text-gray-700 font-medium mb-1" %>
+        <%= form.number_field :rating, in: 1..5, class: "w-24 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" %>
+      </div>
+
+      <!-- Content -->
+      <div>
+        <%= form.label :content, "Your Review", class: "block text-gray-700 font-medium mb-1" %>
+        <%= form.text_area :content, rows: 4, placeholder: "Write your thoughts here...", class: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm" %>
+      </div>
+
+      <!-- Submit -->
+      <div>
+        <%= form.submit "Submit Review", class: "px-6 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Review List -->
+  <ul class="space-y-4">
+    <% @book.reviews.each do |review| %>
+      <li class="bg-gray-50 p-5 rounded-xl shadow hover:shadow-md transition">
+        <div class="flex items-center justify-between mb-2">
+          <strong class="text-gray-900"><%= review.user.email %></strong>
+          <span class="text-yellow-500 font-semibold">
+            <%= "⭐" * review.rating %>
+          </span>
+        </div>
+        <p class="text-gray-700"><%= review.content %></p>
+        <p class="text-sm text-gray-500 mt-2"><%= time_ago_in_words(review.created_at) %> ago</p>
+      </li>
+    <% end %>
+  </ul>
+</div>

@@ -1,34 +1,56 @@
-<p style="color: green"><%= notice %></p>
+<p class="text-green-600 mb-4"><%= notice %></p>
 
-<%= render @book %>
-<p>
-  <strong>Cover Image:</strong><br>
-  <% if @book.image.attached? %>
-    <%= image_tag @book.image, style: "max-width: 200px; height: auto;" %>
-  <% else %>
-    No image uploaded.
-  <% end %>
-</p>
+<div class="max-w-5xl mx-auto px-6 py-10">
+  <!-- Book Details Card -->
+  <div class="bg-white shadow-lg rounded-2xl p-6">
+    <%= render @book %>
 
-<p>
-  <strong>Categories:</strong><br>
-  <% if @book.categories.any? %>
-    <ul>
-      <% @book.categories.each do |category| %>
-        <li><%= category.name %></li>
+    <!-- Cover Image -->
+    <div class="mt-6">
+      <p class="font-semibold text-gray-800 mb-2">Cover Image:</p>
+      <% if @book.image.attached? %>
+        <%= image_tag @book.image, class: "max-w-xs rounded-lg shadow-md hover:scale-105 transition duration-300" %>
+      <% else %>
+        <p class="text-gray-500 italic">No image uploaded.</p>
       <% end %>
-    </ul>
-  <% else %>
-    <em>No categories assigned</em>
-  <% end %>
-</p>
+    </div>
 
-<div>
-  <% if policy(@book).edit? %>
-    <%= link_to "Edit this book", edit_admin_book_path(@book) %>
-  <% end %>
-  <%= link_to "Back to books", books_path %>
-  <% if policy(@book).destroy? %>
-    <%= button_to "Destroy this book", @book, method: :delete, data: { confirm: "Are you sure?" } %>
-  <% end %>
+    <!-- Categories -->
+    <div class="mt-6">
+      <p class="font-semibold text-gray-800 mb-2">Categories:</p>
+      <% if @book.categories.any? %>
+        <ul class="flex flex-wrap gap-2">
+          <% @book.categories.each do |category| %>
+            <li>
+              <%= link_to category.name, category_path(category), 
+                class: "px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium hover:bg-blue-200 transition" %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-gray-500 italic">No categories assigned</p>
+      <% end %>
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-8 flex flex-wrap gap-4">
+      <% if policy(@book).edit? %>
+        <%= link_to "Edit this book", edit_admin_book_path(@book),
+          class: "px-5 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition" %>
+      <% end %>
+
+      <%= link_to "Back to books", books_path,
+        class: "px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition" %>
+
+      <% if policy(@book).destroy? %>
+        <%= button_to "Destroy this book", @book, method: :delete, data: { confirm: "Are you sure?" },
+          class: "px-5 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 transition" %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Review Form -->
+  <div class="mt-10 bg-gray-50 rounded-2xl p-6 shadow-inner">
+    <%= render 'review/form', book: @book %>
+  </div>
 </div>

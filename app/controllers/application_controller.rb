@@ -3,6 +3,14 @@ class ApplicationController < ActionController::Base
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
+  def about
+    # Static about page
+    render "shared/about"
+  end
+
+  def contact
+    render "shared/contact" # Render the contact form
+  end
   private
 
   def user_not_authorized
