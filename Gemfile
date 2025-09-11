@@ -1,68 +1,62 @@
+# Gemfile for Book App
+# This file specifies all Ruby gems required for your Rails application.
+
 source "https://rubygems.org"
 
-# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.0.2", ">= 8.0.2.1"
-# The modern asset pipeline for Rails [https://github.com/rails/propshaft]
-gem "propshaft"
-# Use sqlite3 as the database for Active Record
-gem "pg", ">= 1.4"
-# Use the Puma web server [https://github.com/puma/puma]
-gem "puma", ">= 5.0"
-# Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
-gem "importmap-rails"
-# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
-gem "turbo-rails"
-# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
-gem "stimulus-rails"
-# Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
+# Core Rails and dependencies
+gem "rails", "~> 8.0.2", ">= 8.0.2.1"         # Rails framework
+gem "propshaft"                                # Asset pipeline for Rails 7+
+gem "pg", ">= 1.4"                             # PostgreSQL database adapter
+gem "puma", ">= 5.0"                           # Web server for development/production
 
-# Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-# gem "bcrypt", "~> 3.1.7"
+# Frontend and JavaScript
+gem "importmap-rails"                          # Use importmap for JS dependencies
+gem "turbo-rails"                              # Hotwire Turbo for Rails
+gem "stimulus-rails"                           # Hotwire Stimulus for Rails
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ windows jruby ]
+# API and serialization
+gem "jbuilder"                                 # Build JSON APIs
 
-# Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
-gem "solid_cache"
-gem "solid_queue"
-gem "solid_cable"
+# Authentication and security
+gem "bcrypt", "~> 3.1.7"                       # Password hashing for Devise
 
-# Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", require: false
+# Windows-specific gems
+gem "tzinfo-data", platforms: %i[ windows jruby ] # Timezone data for Windows/JRuby
 
-# Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
-gem "kamal", require: false
+# Background jobs and caching
+gem "solid_cache"                              # Rails caching
+gem "solid_queue"                              # Background job queue
+gem "solid_cable"                              # ActionCable for WebSockets
 
-# Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
-gem "thruster", require: false
-# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+# Performance
+gem "bootsnap", require: false                 # Speeds up boot time
+
+# Authentication and authorization
+gem "devise"                                   # User authentication
+gem "pundit"                                   # Authorization policies
+
+# CSS and frontend styling
+gem "bootstrap", "~> 5.3"                      # Bootstrap CSS framework
+gem "sassc-rails"                              # Sass compiler for Rails
 
 group :development, :test do
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
-
-  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
-  gem "brakeman", require: false
-
-  # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
-  gem "rubocop-rails-omakase", require: false
+  # Debugging and code quality tools
+  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude" # Debugging
+  gem "brakeman", require: false                                      # Security scanner
+  gem "rubocop-rails-omakase", require: false                         # Rails style guide
 end
 
 group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
-  gem "web-console"
+  # Development-only gems
+  gem "web-console"                              # Interactive console in browser
 end
-gem "devise"
 
-gem "pundit"
 group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara"
-  gem "selenium-webdriver"
+  # Testing gems
+  gem "capybara"                                 # Integration testing
+  gem "selenium-webdriver"                       # WebDriver for Capybara
 end
 
-gem "bootstrap"
-gem "sassc-rails" # For Sass compilation
-gem "minitest", group: :test
+# Optional deployment gems
+# gem "kamal", require: false                    # Kamal deployment tool
+# gem "thruster", require: false                 # Thruster deployment

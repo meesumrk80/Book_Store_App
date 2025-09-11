@@ -1,0 +1,41 @@
+<div class="bg-white rounded-lg shadow p-4 flex flex-col">
+    
+    <!-- Book Info -->
+    <div class="mt-4 flex-1">
+        <h2 class="text-lg font-semibold text-gray-800"><%= book.title %></h2>
+        <% if book.categories.any? %>
+        <% book.categories.each do |cat| %>
+        <%= link_to cat.name + " /", category_path(cat), class: "text-sm text-gray-600" %>
+        <% end %>
+        <% end %>
+
+        <div id="<%= dom_id book %>">
+            <p>
+                <strong>Title:</strong>
+                <%= book.title %>
+            </p>
+
+            <p>
+                <strong>Author:</strong>
+                <%= book.author %>
+            </p>
+
+            <p>
+                <strong>Price:</strong>
+                <%= book.price %>
+            </p>
+
+            <p>
+                <strong>Stock:</strong>
+                <%= book.stock %>
+            </p>
+
+            <p>
+                <strong>Description:</strong>
+                <%= book.description %>
+            </p>
+
+        </div>
+
+    </div>
+</div>
