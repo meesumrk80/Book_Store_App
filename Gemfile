@@ -5,7 +5,8 @@ source "https://rubygems.org"
 
 # Core Rails and dependencies
 gem "rails", "~> 8.0.2", ">= 8.0.2.1"         # Rails framework
-gem "propshaft"                                # Asset pipeline for Rails 7+
+gem "propshaft"
+# gem "sprockets-rails"                           # Asset pipeline for Rails 7+
 gem "pg", ">= 1.4"                             # PostgreSQL database adapter
 gem "puma", ">= 5.0"                           # Web server for development/production
 
@@ -36,8 +37,8 @@ gem "devise"                                   # User authentication
 gem "pundit"                                   # Authorization policies
 
 # CSS and frontend styling
-gem "bootstrap", "~> 5.3"                      # Bootstrap CSS framework
-gem "sassc-rails"                              # Sass compiler for Rails
+# gem "bootstrap", "~> 5.3"                      # Bootstrap CSS framework
+# gem "sassc-rails"                              # Sass compiler for Rails
 
 group :development, :test do
   # Debugging and code quality tools
