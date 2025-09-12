@@ -1,13 +1,27 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # Associations
   has_one :cart, dependent: :destroy
-  after_create :create_cart
+  has_many :reviews, dependent: :destroy
+  has_many :orders, dependent: :destroy
+
+  # Devise modules
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :reviews, dependent: :destroy
+  # Enum for roles
   enum :role, { customer: "customer", admin: "admin" }
+
+  # Callbacks
+  after_create :create_cart
+
+  # Validations
+  validates :email, format: {
+    with: /\A[^@\s]+@[^@\s]+\.[^@\s]+\z/,
+    message: "must contain a name, @, and a valid domain (e.g. name@example.com)"
+  }
+  validates :username, presence: true
+
+  # Role helpers
   def admin?
     role == "admin"
   end
@@ -15,7 +29,9 @@ class User < ApplicationRecord
   def customer?
     role == "customer"
   end
+
   private
+
   def create_cart
     Cart.create(user: self)
   end

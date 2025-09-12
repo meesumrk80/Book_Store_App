@@ -1,12 +1,59 @@
-<h1>Your Cart</h1>
+<h1 class="text-2xl font-bold mb-6 text-gray-800">Your Cart</h1>
 
 <% if @cart.cart_items.any? %>
-<% @cart.cart_items.each do |item| %>
-<p>
-    <%= item.book.title %> - Quantity: <%= item.quantity %>
-    <%= button_to "Remove", cart_item_path(item), method: :delete %>
-</p>
-<% end %>
+<div class="space-y-4">
+    <% @cart.cart_items.each do |item| %>
+    <div class="flex items-center justify-between bg-white shadow rounded-lg p-4">
+
+        <!-- Book image + details -->
+        <div class="flex items-center space-x-4">
+            <%= image_tag item.book.image, class: "w-16 h-20 object-cover rounded" %>
+            <div>
+                <h2 class="text-lg font-semibold text-gray-900"><%= item.book.title %></h2>
+                <p class="text-gray-700">Author: <%= item.book.author %></p>
+                <p class="text-gray-800 font-medium">Price: $<%= item.book.price %></p>
+            </div>
+            <div>
+
+                <!-- Quantity controls -->
+                <div class="flex items-center space-x-2 mt-2">
+                    <!-- Decrease -->
+                    <%= button_to "-", 
+                  cart_item_path(item, quantity: item.quantity - 1), 
+                  method: :patch,
+                  class: "px-2 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300" %>
+
+                    <!-- Current quantity -->
+                    <span class="text-gray-800 font-medium"><%= item.quantity %></span>
+
+                    <!-- Increase -->
+                    <%= button_to "+", 
+                  cart_item_path(item, quantity: item.quantity + 1), 
+                  method: :patch,
+                  class: "px-2 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300" %>
+                </div>
+            </div>
+        </div>
+
+        <!-- Remove button -->
+        <%= button_to "Remove",
+              cart_item_path(item),
+              method: :delete,
+              class: "bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition" %>
+    </div>
+    <% end %>
+</div>
+<br>
+<div>
+    <h2 class="text-xl font-bold text-gray-800">Total: $<%= @cart.cart_items.sum { |item| item.book.price * item.quantity } %></h2>
+</div>
+<!-- Place Order button -->
+<div class="mt-6 flex justify-end">
+    <%= button_to "Place Order",
+          orders_path,
+          method: :post,
+          class: "bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition" %>
+</div>
 <% else %>
-<p>Your cart is empty.</p>
+<p class="text-gray-600 text-lg mt-4">Your cart is empty.</p>
 <% end %>

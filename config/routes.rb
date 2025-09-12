@@ -11,18 +11,18 @@ Rails.application.routes.draw do
 
   # Cart
   resource :cart, only: :show
-  resources :cart_items, only: [ :destroy ]
+  resources :cart_items, only: [ :destroy, :update ]
+  resources :orders, only: [ :new, :create, :show ]
 
   # Categories
   resources :categories, only: [ :index, :show ]
 
   # Books & Reviews
   resources :books do
-    member do
-      post "add_to_cart", to: "cart_items#create"
-    end
+    resources :cart_items, only: [ :create, :update, :destroy ]
     resources :reviews, only: [ :create, :destroy, :edit ]
-  end
+end
+
 
   # Admin namespace
   namespace :admin do
