@@ -19,46 +19,46 @@
     <link rel="apple-touch-icon" href="/icon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-<%= javascript_include_tag "application", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
 </head>
 
 <body class="bg-gray-50 min-h-screen flex flex-col">
-  <!-- Flash Messages -->
-  <% if notice.present? %>
-    <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
-      <%= notice %>
-    </div>
-  <% end %>
-
-  <% if alert.present? %>
-    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
-      <%= alert %>
-    </div>
-  <% end %>
-
   <!-- Navigation -->
   <%= render "shared/nav" %>
 
-  <!-- Auth Links -->
+  <!-- Flash + Auth Bar -->
   <div class="container mx-auto px-4 mt-4">
-    <% if user_signed_in? %>
-      <div class="flex items-center space-x-4 text-gray-700">
-        <span>Logged in as <strong><%= current_user.username %></strong></span>
-        <%= button_to "Logout",
-              destroy_user_session_path,
-              method: :delete,
-              class: "px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700
-                      focus:ring-4 focus:outline-none focus:ring-red-300" %>
+    <% if notice.present? %>
+      <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
+        <%= notice %>
       </div>
-    <% else %>
-      <div class="flex space-x-4">
-        <%= link_to "Login", new_user_session_path,
-              class: "text-blue-600 hover:underline" %>
-        <%= link_to "Sign up", new_user_registration_path,
-              class: "text-blue-600 hover:underline" %>
+    <% end %>
+
+    <% if alert.present? %>
+      <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+        <%= alert %>
+      </div>
+    <% end %>
+
+    <% if defined?(user_signed_in?) && !current_page?(new_user_session_path) %>
+      <div class="flex items-center justify-between text-gray-700">
+        <% if user_signed_in? %>
+          <div class="flex items-center space-x-3">
+            <span class="text-sm">Logged in as <strong><%= current_user.try(:username) || current_user.try(:email) %></strong></span>
+          </div>
+          <div>
+            <%= button_to "Logout",
+                  destroy_user_session_path,
+                  method: :delete,
+                  class: "px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 text-sm" %>
+          </div>
+        <% else %>
+          <div class="flex space-x-4">
+            <%= link_to "Login", new_user_session_path, class: "text-blue-600 hover:underline text-sm" %>
+            <%= link_to "Sign up", new_user_registration_path, class: "text-blue-600 hover:underline text-sm" %>
+          </div>
+        <% end %>
       </div>
     <% end %>
   </div>
@@ -66,8 +66,14 @@
   <!-- Page Content -->
   <main class="flex-1 container mx-auto px-4 mt-6">
     <%= yield %>
-    <%= render "/shared/footer"%>
   </main>
+
+  <!-- Footer -->
+  <footer class="mt-10 border-t bg-white/60">
+    <div class="container mx-auto px-4 py-6">
+      <%= render "/shared/footer" %>
+    </div>
+  </footer>
 </body>
 
 </html>

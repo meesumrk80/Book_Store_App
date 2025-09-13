@@ -1,9 +1,8 @@
-<%= form_with(model: book) do |form| %>
+<%= form_with(model: book, html: { class: "space-y-6" }) do |form| %>
   <% if book.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(book.errors.count, "error") %> prohibited this book from being saved:</h2>
-
-      <ul>
+    <div class="rounded-md border border-red-200 bg-red-50 p-4 text-red-800">
+      <h2 class="font-semibold mb-2"><%= pluralize(book.errors.count, "error") %> prohibited this book from being saved:</h2>
+      <ul class="list-disc pl-5 space-y-1">
         <% book.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
@@ -11,47 +10,51 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    <div>
+      <%= form.label :title, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_field :title, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    </div>
+
+    <div>
+      <%= form.label :author, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_field :author, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    </div>
+
+    <div>
+      <%= form.label :price, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.number_field :price, step: 0.01, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    </div>
+
+    <div>
+      <%= form.label :stock, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.number_field :stock, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    </div>
   </div>
 
   <div>
-    <%= form.label :author, style: "display: block" %>
-    <%= form.text_field :author %>
+    <%= form.label :description, class: "block text-sm font-medium text-gray-700" %>
+    <%= form.text_area :description, rows: 4, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
   </div>
 
   <div>
-    <%= form.label :price, style: "display: block" %>
-    <%= form.number_field :price, step: 0.01 %>
+    <%= form.label :image, class: "block text-sm font-medium text-gray-700" %>
+    <%= form.file_field :image, class: "mt-1 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
   </div>
 
   <div>
-    <%= form.label :stock, style: "display: block" %>
-    <%= form.number_field :stock %>
+    <%= form.label :category_ids, "Categories", class: "block text-sm font-medium text-gray-700 mb-2" %>
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+      <%= form.collection_check_boxes :category_ids, Category.all, :id, :name do |cb| %>
+        <label class="flex items-center space-x-2 text-sm text-gray-700">
+          <%= cb.check_box(class: 'rounded text-blue-600 focus:ring-blue-500') %>
+          <span><%= cb.text %></span>
+        </label>
+      <% end %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.text_area :description, rows: 4 %>
-  </div>
-
-  <div>
-    <%= form.label :image %><br>
-    <%= form.file_field :image %>
-  </div>
-
-  <div>
-    <%= form.label :category_ids, "Categories" %><br>
-    <%= form.collection_check_boxes :category_ids, Category.all, :id, :name do |cb| %>
-      <div>
-        <%= cb.check_box %>
-        <%= cb.label %>
-      </div>
-    <% end %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class="flex justify-end">
+    <%= form.submit (book.persisted? ? 'Update Book' : 'Create Book'), class: "inline-flex items-center px-5 py-2.5 rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
   </div>
 <% end %>

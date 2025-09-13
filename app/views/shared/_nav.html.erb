@@ -1,44 +1,37 @@
-<nav class="bg-gray-800 shadow-lg">
+<nav class="bg-gray-900/95 backdrop-blur shadow">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16">
       <!-- Logo -->
       <div class="flex items-center">
-        <a href="/" class="text-2xl font-bold text-white">📚 BookStore</a>
+        <%= link_to root_path, class: "text-xl sm:text-2xl font-bold text-white tracking-tight" do %>
+          📚 BookStore
+        <% end %>
       </div>
 
-      <!-- Links -->
+      <!-- Desktop Nav -->
       <div class="hidden md:flex items-center space-x-6">
-        <a href="/" class="text-gray-300 hover:text-white">Home</a>
-        <a href="/books" class="text-gray-300 hover:text-white">Books</a>
-        <a href="/categories" class="text-gray-300 hover:text-white">Categories</a>
-        <a href="/shared/about" class="text-gray-300 hover:text-white">About</a>
+        <% nav_link = ->(name, path) do %>
+          <% active = current_page?(path) %>
+          <%= link_to name, path, class: "px-2 py-1 rounded-md text-sm #{active ? 'text-white bg-gray-800' : 'text-gray-300 hover:text-white hover:bg-gray-800'}" %>
+        <% end %>
+        <%= nav_link.call('Home', root_path) %>
+        <%= nav_link.call('Books', books_path) %>
+        <%= nav_link.call('Categories', categories_path) %>
+        <%= link_to 'About', shared_about_path, class: "px-2 py-1 rounded-md text-sm text-gray-300 hover:text-white hover:bg-gray-800" rescue link_to('About', '/shared/about', class: 'px-2 py-1 rounded-md text-sm text-gray-300 hover:text-white hover:bg-gray-800') %>
       </div>
 
       <!-- Search + Cart -->
-      <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-3">
         <!-- Search Bar -->
         <div class="hidden sm:block relative">
-          <%= form_with url: books_path, method: :get, local: true do %>
-            <input
-              type="text"
-              name="q"
-              placeholder="Search books..."
-              value="<%= params[:q] %>"
-              aria-label="Search books"
-              class="px-3 py-1 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-            <button
-              type="submit"
-              class="ml-2 px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              Search
-            </button>
+          <%= form_with url: books_path, method: :get, local: true, class: "flex items-center" do %>
+            <input type="text" name="q" placeholder="Search books..." value="<%= params[:q] %>" aria-label="Search books" class="px-3 py-1.5 rounded-md text-sm bg-white/10 placeholder-gray-400 text-white border border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-gray-800" />
+            <button type="submit" class="ml-2 px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm">Search</button>
           <% end %>
 
-          <!-- Only show search results if a query is present -->
           <% if params[:q].present? %>
-            <div class="absolute bg-white shadow-lg rounded-lg mt-2 w-64 z-10 p-4 max-h-64 overflow-y-auto">
-              <% if @books.any? %>
+            <div class="absolute bg-white shadow-lg rounded-lg mt-2 w-72 z-10 p-4 max-h-64 overflow-y-auto">
+              <% if defined?(@books) && @books.any? %>
                 <h3 class="text-gray-700 font-semibold mb-2">Search Results</h3>
                 <% @books.each do |book| %>
                   <div>
@@ -53,24 +46,38 @@
         </div>
 
         <!-- Cart Button -->
-        <a href="/cart" class="relative inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-          🛒
-          <span class="ml-1">Cart</span>
-          <!-- Cart count badge -->
-          <span class="absolute -top-2 -right-2 bg-red-600 text-xs text-white font-bold px-2 py-0.5 rounded-full">2</span>
-        </a>
-      </div>
+        <%= link_to cart_path, class: "relative inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm" do %>
+          🛒 <span class="ml-1 hidden sm:inline">Cart</span>
+          <% if defined?(current_cart) && current_cart.respond_to?(:cart_items) %>
+            <% count = current_cart.cart_items.sum(:quantity) rescue nil %>
+            <% if count.present? && count > 0 %>
+              <span class="absolute -top-2 -right-2 bg-red-600 text-[10px] text-white font-bold px-1.5 py-0.5 rounded-full"><%= count %></span>
+            <% end %>
+          <% end %>
+        <% end %>
 
-      <!-- Mobile Menu Button -->
-      <div class="flex items-center md:hidden">
-        <button
-          type="button"
-          aria-label="Toggle menu"
-          class="text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-        >
-          ☰
-        </button>
+        <!-- Mobile menu button -->
+        <button type="button" aria-label="Toggle menu" data-menu-toggle class="md:hidden text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">☰</button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div data-mobile-menu class="md:hidden hidden border-t border-gray-800 py-3">
+      <div class="flex flex-col space-y-2">
+        <%= link_to 'Home', root_path, class: "px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded" %>
+        <%= link_to 'Books', books_path, class: "px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded" %>
+        <%= link_to 'Categories', categories_path, class: "px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded" %>
+        <%= link_to 'About', (defined?(shared_about_path) ? shared_about_path : '/shared/about'), class: "px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded" %>
       </div>
     </div>
   </div>
 </nav>
+
+<script>
+  document.addEventListener('turbo:load', function () {
+    var btn = document.querySelector('[data-menu-toggle]');
+    var menu = document.querySelector('[data-mobile-menu]');
+    if (!btn || !menu) return;
+    btn.addEventListener('click', function(){ menu.classList.toggle('hidden'); });
+  });
+</script>

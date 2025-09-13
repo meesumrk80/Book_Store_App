@@ -1,6 +1,10 @@
-<h1><%= @book.title %></h1>
-<p><strong>Author:</strong> <%= @book.author %></p>
-<p><strong>Description:</strong> <%= @book.description %></p>
+<div class="bg-white rounded-lg shadow p-6">
+  <h1 class="text-2xl font-bold text-gray-900"><%= @book.title %></h1>
+  <p class="mt-1 text-gray-700">by <%= @book.author %></p>
+  <p class="mt-4 text-gray-800"><%= @book.description %></p>
 
-<%= link_to "Edit", edit_admin_book_path(@book) %> |
-<%= link_to "Back", admin_books_path %>
+  <div class="mt-6 space-x-3">
+    <%= link_to "Edit", edit_admin_book_path(@book), class: "inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700" %>
+    <%= link_to "Back", admin_books_path, class: "inline-block text-blue-600 hover:underline" %>
+  </div>
+</div>
