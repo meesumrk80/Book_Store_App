@@ -55,6 +55,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_12_115308) do
   create_table "books_categories", id: false, force: :cascade do |t|
     t.bigint "book_id", null: false
     t.bigint "category_id", null: false
+    t.index ["book_id", "category_id"], name: "index_books_categories_on_book_id_and_category_id"
+    t.index ["category_id", "book_id"], name: "index_books_categories_on_category_id_and_book_id"
   end
 
   create_table "cart_items", force: :cascade do |t|
@@ -110,7 +112,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_12_115308) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "role"
+    t.string "role", default: "customer"
     t.string "username"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
